@@ -15,7 +15,8 @@ const corsOptions = {
 	methods: 'POST',
 };
 // middleware
-app.use(express.json({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(cors(corsOptions));
 // needed vars
 const captchaSecret = process.env.RECAPTCHA_SECRET;
@@ -23,12 +24,11 @@ const captchaAPIBase = 'https://www.google.com/recaptcha/api/siteverify';
 // define routes
 app.post('/recaptcha', async (req, res) => {
 	console.log(req.body);
-	const token = req.body.token;
+	const token = await req.body.token;
 	try {
 		const response = await axios.post(
 			`${captchaAPIBase}?secret=${captchaSecret}&response=${token}`
 		);
-		console.log(response);
 		const resObj = {
 			success: response.data.success,
 			hostname: response.data.hostname,
