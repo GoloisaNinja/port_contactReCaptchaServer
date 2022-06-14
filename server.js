@@ -6,7 +6,11 @@ import axios from 'axios';
 // creating the server
 const app = express();
 const corsOptions = {
-	origin: ['http://localhost:8000', 'https://joncollins.dev'],
+	origin: [
+		'http://localhost:8000',
+		'https://joncollins.dev',
+		'https://jcodes.page',
+	],
 	optionsSuccessStatus: 200,
 	methods: 'POST',
 };
@@ -27,7 +31,7 @@ app.post('/recaptcha', async (req, res) => {
 			success: response.data.success,
 			hostname: response.data.hostname,
 		};
-		if (resObj.success && resObj.hostname === 'https://joncollins.dev') {
+		if (resObj.success) {
 			return res.status(200).send({ success: resObj.success });
 		}
 		return res.status(400).send({ success: false });
