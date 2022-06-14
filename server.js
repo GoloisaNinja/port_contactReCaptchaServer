@@ -1,11 +1,18 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import express from 'express';
+import cors from 'cors';
 import axios from 'axios';
 // creating the server
 const app = express();
+const corsOptions = {
+	origin: ['http://localhost:8000', 'https://joncollins.dev'],
+	optionsSuccessStatus: 200,
+	methods: 'POST',
+};
 // middleware
 app.use(express.json({ extended: false }));
+app.use(cors(corsOptions));
 // needed vars
 const captchaSecret = process.env.RECAPTCHA_SECRET;
 const captchaAPIBase = 'https://www.google.com/recaptcha/api/siteverify';
