@@ -3,6 +3,8 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
+// import nodemailer func
+import mailMain from './nodeMail.js';
 // creating the server
 const app = express();
 const corsOptions = {
@@ -41,6 +43,19 @@ app.post('/recaptcha', async (req, res) => {
 		return res
 			.status(500)
 			.send({ error, message: 'Server issues...', success: false });
+	}
+});
+app.post('/contact', async (req, res) => {
+	const { name, email, subject, message } = req.body;
+	try {
+		if (subject === '') {
+			await mailMain({ name, email, message });
+			return res.status(200).send({ message: 'contact email sent...' });
+		}
+		res.status(200).send({ message: 'lol bots...' });
+	} catch (error) {
+		console.log(error);
+		res.status(500).send({ message: 'Server error...' });
 	}
 });
 
