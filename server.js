@@ -3,6 +3,7 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
+import { spamEmailCheck } from './utils.js';
 // import nodemailer func
 import mailMain from './nodeMail.js';
 // creating the server
@@ -48,7 +49,7 @@ app.post('/recaptcha', async (req, res) => {
 app.post('/contact', async (req, res) => {
 	const { name, email, subject, message } = req.body;
 	try {
-		if (subject === '') {
+		if (subject === '' || !spamEmailCheck) {
 			await mailMain({ name, email, message });
 			return res.status(200).send({ message: 'contact email sent...' });
 		}
